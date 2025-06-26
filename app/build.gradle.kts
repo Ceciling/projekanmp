@@ -5,7 +5,12 @@ plugins {
 
 android {
     namespace = "com.ubaya.projekanmp_uas"
-    compileSdk = 34
+    compileSdk = 35
+
+    buildFeatures {
+        viewBinding = true
+
+    }
 
     defaultConfig {
         applicationId = "com.ubaya.projekanmp_uas"
@@ -45,4 +50,6 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+
 }
