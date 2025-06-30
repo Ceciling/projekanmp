@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_main"
+    app:startDestination="@id/expenseFragment">
+
+    <fragment
+        android:id="@+id/expenseFragment"
+        android:name="com.ubaya.projekanmp_uas.view.ExpenseFragment"
+        android:label="Expense" />
+    <fragment
+        android:id="@+id/budgetFragment"
+        android:name="com.ubaya.projekanmp_uas.view.BudgetFragment"
+        android:label="Budget" />
+    <fragment
+        android:id="@+id/reportFragment"
+        android:name="com.ubaya.projekanmp_uas.view.ReportFragment"
+        android:label="Report" />
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.ubaya.projekanmp_uas.view.ProfileFragment"
+        android:label="Profile" />
+</navigation>
