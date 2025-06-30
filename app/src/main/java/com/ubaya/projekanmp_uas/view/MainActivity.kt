@@ -37,12 +37,12 @@ class MainActivity : AppCompatActivity() {
 
         binding.bottomNav.setupWithNavController(navController)
 
-        val logoutBtn = findViewById<Button>(R.id.buttonLogout)
-        logoutBtn.setOnClickListener {
-            sessionManager.clear()
-            startActivity(Intent(this, AuthActivity::class.java))
-            finish()
-        }
+//        val logoutBtn = findViewById<Button>(R.id.buttonLogout)
+//        logoutBtn.setOnClickListener {
+//            sessionManager.clear()
+//            startActivity(Intent(this, AuthActivity::class.java))
+//            finish()
+//        }
     }
 
 

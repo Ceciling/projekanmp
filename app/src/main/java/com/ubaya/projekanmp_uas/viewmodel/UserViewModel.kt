@@ -3,28 +3,26 @@ package com.ubaya.projekanmp_uas.viewmodel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.ubaya.projekanmp_uas.model.database.AppDatabase.Companion.getDatabase
 import com.ubaya.projekanmp_uas.model.entity.User
+import com.ubaya.projekanmp_uas.util.buildDb
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlin.coroutines.CoroutineContext
 
-class UserViewModel(application: Application) : AndroidViewModel(application), CoroutineScope {
-    private val job = Job()
-
+class UserViewModel(application: Application) : AndroidViewModel(application) {
     val userLD = MutableLiveData<User?>()
     val registerSuccessLD = MutableLiveData<Boolean>()
     val errorLD = MutableLiveData<String>()
 
-    override val coroutineContext: CoroutineContext
-        get() = job + Dispatchers.IO
-
     fun login(username: String, password: String) {
-        launch {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
-                val db = getDatabase(getApplication())
+                val db = buildDb(getApplication())
                 val user = db.userDao().login(username, password)
                 userLD.postValue(user)
             } catch (e: Exception) {
@@ -34,9 +32,9 @@ class UserViewModel(application: Application) : AndroidViewModel(application), C
     }
 
     fun register(user: User) {
-        launch {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
-                val db = getDatabase(getApplication())
+                val db = buildDb(getApplication())
                 val existingUser = db.userDao().getUser(user.username)
                 if (existingUser == null) {
                     db.userDao().insertUser(user)
@@ -49,6 +47,23 @@ class UserViewModel(application: Application) : AndroidViewModel(application), C
                 errorLD.postValue("Registrasi gagal: ${e.message}")
                 registerSuccessLD.postValue(false)
             }
+        }
+    }
+
+    fun validatePassword(username: String, password: String, callback: (Boolean) -> Unit) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val db = buildDb(getApplication())
+            val user = db.userDao().login(username, password)
+            withContext(Dispatchers.Main) {
+                callback(user != null)
+            }
+        }
+    }
+
+    fun updatePassword(username: String, newPassword: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val db = buildDb(getApplication())
+            db.userDao().updatePassword(username, newPassword)
         }
     }
 }
