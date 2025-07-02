@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-<!--    tools:context=".ApplyTeam"-->
+    <!--    tools:context=".ApplyTeam"-->
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recBudgetingList"
@@ -34,11 +34,12 @@
         android:id="@+id/floatingActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="76dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="96dp"
         android:clickable="true"
         android:contentDescription="budget_item"
+        android:src="@drawable/baseline_add_24"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
-<!--        app:srcCompat="@drawable/baseline_add_24" -->
+        app:layout_constraintEnd_toEndOf="parent" />
+    <!--        app:srcCompat="@drawable/baseline_add_24" -->
 </androidx.constraintlayout.widget.ConstraintLayout>
