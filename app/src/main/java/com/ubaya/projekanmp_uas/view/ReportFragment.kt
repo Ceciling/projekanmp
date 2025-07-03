@@ -77,7 +77,7 @@ class ReportFragment : Fragment() {
                 val formatter = DecimalFormat("#,###")
 
                 binding.txtTotalReport.text =
-                    "Total Expense / Budget: Rp${formatter.format(totalAllExpense).replace(",", ".")} / Rp${formatter.format(totalBudget).replace(",", ".")}"
+                    "Total Expense / Budget: Rp"+ "\n" + "${formatter.format(totalAllExpense).replace(",", ".")} / Rp${formatter.format(totalBudget).replace(",", ".")}"
             }
         }
     }

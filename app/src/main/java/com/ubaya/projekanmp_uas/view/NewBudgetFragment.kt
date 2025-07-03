@@ -77,6 +77,10 @@ class NewBudgetFragment : Fragment() {
         binding.buttonAddNewBudget.setOnClickListener {
             val newBudget = binding.txtAmountBudgetNew.text.toString().toInt()
             val newName = binding.txtNewBudget.text.toString()
+            if (newName.isEmpty()){
+                Toast.makeText(view.context, "Nama budget tidak boleh kosong!", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
             if (newBudget < 0) {
                 Toast.makeText(view.context, "Error Nominal Tidak Boleh Negatif", Toast.LENGTH_LONG)
                     .show()

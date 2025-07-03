@@ -72,7 +72,6 @@ class NewExpenseFragment : Fragment() {
             binding.spinnerBudget.adapter = budgetAdapter
         })
 
-
         binding.spinnerBudget.onItemSelectedListener= object: AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>?,
@@ -92,7 +91,6 @@ class NewExpenseFragment : Fragment() {
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
-
 
         binding.buttonAdd.setOnClickListener {
 
