@@ -57,6 +57,11 @@ class ExpenseViewModel (application: Application) : AndroidViewModel(application
         }
     }
 
+    suspend fun getTotalByBudget(userId: Int, budgetId: Int): Long {
+        val db = buildDb(getApplication())
+        return db.expenseDao().totalExpenseByBudget(userId, budgetId)
+    }
+
 //    fun login(username: String, password: String) {
 //        viewModelScope.launch(Dispatchers.IO) {
 //            try {

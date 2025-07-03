@@ -5,10 +5,27 @@
     android:layout_height="match_parent"
     tools:context=".view.ReportFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
+        android:orientation="vertical"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:padding="16dp">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recReport"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/txtTotalReport"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Total Expense / Budget: Rp0"
+            android:textStyle="bold"
+            android:paddingTop="16dp"/>
+    </LinearLayout>
+
 
 </FrameLayout>

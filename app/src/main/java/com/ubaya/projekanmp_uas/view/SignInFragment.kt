@@ -51,6 +51,7 @@ class SignInFragment : Fragment() {
         userViewModel.userLD.observe(viewLifecycleOwner) { user ->
             if (user != null) {
                 sessionManager.save(user.username)
+                sessionManager.saveUserId(user.id)
                 Toast.makeText(requireContext(), "Login berhasil", Toast.LENGTH_SHORT).show()
                 startActivity(Intent(requireContext(), MainActivity::class.java))
                 requireActivity().finish()
@@ -83,6 +84,4 @@ class SignInFragment : Fragment() {
         binding = FragmentSignInBinding.inflate(inflater,container,false)
         return  binding.root
     }
-
-
 }

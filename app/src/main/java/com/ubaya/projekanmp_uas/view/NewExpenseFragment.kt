@@ -56,11 +56,12 @@ class NewExpenseFragment : Fragment() {
         binding.textTanggal.text=dateConvert(currentDate)
 
         sessionManager = SessionManager(requireContext())
-        val currentUsername = sessionManager.get()
+        //val currentUsername = sessionManager.get()
+        val userId = sessionManager.getUserId()
         expenseViewModel =
             ViewModelProvider(this).get(ExpenseViewModel::class.java)
         budgetViewModel = ViewModelProvider(this).get(BudgetViewModel::class.java)
-        budgetViewModel.selectUserBudget(currentUsername.toString().toInt())
+        budgetViewModel.selectUserBudget(userId)
         budgetViewModel.budgetListLD.observe (viewLifecycleOwner,Observer{
             listOfBudget.addAll(it)
             for (budgetname in listOfBudget){
@@ -82,7 +83,7 @@ class NewExpenseFragment : Fragment() {
                 budgetId=position+1
                 maxBudget = listOfBudget[position].maxAmount.toString().toInt()
                 binding.textBudgetNew.text = "Rp. "+formatter(maxBudget)
-                expenseViewModel.totalExpenseByBudget(currentUsername.toString().toInt(),(position+1))
+                expenseViewModel.totalExpenseByBudget(userId,(position+1))
                 expenseViewModel.amountLD.observe (viewLifecycleOwner,Observer{
                     currentExpense=it.toString().toInt()
                     binding.textCurrentExpensesNew.text=formatter(currentExpense)
@@ -107,7 +108,7 @@ class NewExpenseFragment : Fragment() {
                     description = binding.textDeskripsi.text.toString(),
                     timestamp = currentDate.toLong(),
                     budgetId =  budgetId.toString().toInt(),
-                    userId = currentUsername.toString().toInt()
+                    userId = userId
                 )
                 expenseViewModel.addExpenses(expenseBaru)
                 Toast.makeText(view.context, "Data added", Toast.LENGTH_LONG).show()

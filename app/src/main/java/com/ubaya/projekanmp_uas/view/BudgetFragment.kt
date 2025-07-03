@@ -36,15 +36,18 @@ class BudgetFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         sessionManager = SessionManager(requireContext())
-        val currentUsername = sessionManager.get()
-
-        viewModelBudget.selectUserBudget(currentUsername.toString().toInt())
+        //val currentUsername = sessionManager.get()
+        val userId = sessionManager.getUserId()
+        if (userId != -1) {
+            viewModelBudget.selectUserBudget(userId)
+        }
+        //viewModelBudget.selectUserBudget(currentUsername.toString().toInt())
         binding.recBudgetingList.layoutManager = LinearLayoutManager(context)
         binding.recBudgetingList.adapter = budgetingListAdapter
 
-        viewModelBudget.budgetListLD.observe (viewLifecycleOwner,Observer{
-            budgetingListAdapter.updateBudgetList(it)
-        })
+        viewModelBudget.budgetListLD.observe(viewLifecycleOwner) { list ->
+            budgetingListAdapter.updateBudgetList(list)
+        }
 
         binding.floatingActionButton.setOnClickListener {
             val action = BudgetFragmentDirections.actionBudgetFragmentToNewBudgetFragment(editBudget = false)

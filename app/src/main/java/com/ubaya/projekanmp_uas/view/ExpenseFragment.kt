@@ -45,13 +45,13 @@ class ExpenseFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         sessionManager = SessionManager(requireContext())
-        val currentUsername = sessionManager.get()
-
+        //val currentUsername = sessionManager.get()
+        val userId = sessionManager.getUserId()
         binding.recViewExpenses.layoutManager = LinearLayoutManager(context)
         binding.recViewExpenses.adapter = expensesListAdapter
 
-        expenseViewModel.selectUserExpense(currentUsername.toString().toInt())
-        budgetViewModel.selectUserBudget(currentUsername.toString().toInt())
+        expenseViewModel.selectUserExpense(userId)
+        budgetViewModel.selectUserBudget(userId)
 
         budgetViewModel.budgetListLD.observe (viewLifecycleOwner,Observer{
             listOfBudget.addAll(it)

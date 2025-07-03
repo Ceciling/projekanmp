@@ -46,14 +46,15 @@ class NewBudgetFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         sessionManager = SessionManager(requireContext())
-        val currentUsername = sessionManager.get()
+        //val currentUsername = sessionManager.get()
+        val userId = sessionManager.getUserId()
         val idBudget = NewBudgetFragmentArgs.fromBundle(requireArguments()).idBudget
         var totalExpense=0
-        budgetViewModel.selectUserBudget(currentUsername.toString().toInt())
+        budgetViewModel.selectUserBudget(userId)
         budgetViewModel.budgetListLD.observe (viewLifecycleOwner,Observer{
             listOfBudget.addAll(it)
         })
-        expenseViewModel.totalExpenseByBudget(currentUsername.toString().toInt(),idBudget)
+        expenseViewModel.totalExpenseByBudget(userId,idBudget)
         expenseViewModel.amountLD.observe (viewLifecycleOwner,Observer{
             totalExpense=it.toInt()
         })
@@ -79,7 +80,7 @@ class NewBudgetFragment : Fragment() {
                 Toast.makeText(view.context, "Error Nominal Tidak Boleh Negatif", Toast.LENGTH_LONG).show()
             }else{
                 val budgetBaru = Budget(
-                    iduser = currentUsername.toString().toInt(),
+                    iduser = userId,
                     createdAt = currentDate.toString().toLong(),
                     name = newName,
                     maxAmount = newBudget.toLong()
@@ -96,7 +97,7 @@ class NewBudgetFragment : Fragment() {
                 Toast.makeText(view.context, "Error ! ", Toast.LENGTH_LONG).show()
             }else{
                 budgetViewModel.updateBudget(Budget(
-                    iduser = currentUsername.toString().toInt(),
+                    iduser = userId,
                     createdAt = currentDate.toString().toLong(),
                     name = newName,
                     maxAmount = newBudget.toLong()

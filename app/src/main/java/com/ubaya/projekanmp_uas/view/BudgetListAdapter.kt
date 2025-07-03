@@ -28,7 +28,9 @@ class BudgetListAdapter (val listBudget:ArrayList<Budget>)
         holder.binding.textKategoriBudgeting.text=listBudget[position].name
 
         holder.binding.cardBudget.setOnClickListener {
-            val action = BudgetFragmentDirections.actionBudgetFragmentToNewBudgetFragment((position+1),true)
+            //val action = BudgetFragmentDirections.actionBudgetFragmentToNewBudgetFragment((position+1),true)
+            val idBudget = listBudget[position].id
+            val action = BudgetFragmentDirections.actionBudgetFragmentToNewBudgetFragment(idBudget, true)
             Navigation.findNavController(it).navigate(action)
         }
     }

@@ -49,7 +49,7 @@ class SignUpFragment : Fragment() {
                 return@setOnClickListener
             }
 
-            val user = User(username, firstName, lastName, password)
+            val user = User(0, username, firstName, lastName, password)
             userViewModel.register(user)
         }
 

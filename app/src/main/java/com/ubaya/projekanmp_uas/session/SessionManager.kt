@@ -8,7 +8,10 @@ class SessionManager(context: Context) {
     fun save(username: String) {
         pref.edit().putString("USER", username).apply()
     }
-
+    fun saveUserId(userId: Int) {
+        pref.edit().putInt("USER_ID", userId).apply()
+    }
+    fun getUserId(): Int = pref.getInt("USER_ID", -1)
     fun get(): String? = pref.getString("USER", null)
     fun clear() = pref.edit().remove("USER").apply()
 }

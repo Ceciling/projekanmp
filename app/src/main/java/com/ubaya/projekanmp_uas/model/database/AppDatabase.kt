@@ -13,7 +13,7 @@ import com.ubaya.projekanmp_uas.model.entity.User
 import com.ubaya.projekanmp_uas.util.DB_NAME
 import com.ubaya.projekanmp_uas.util.MIGRATION_1_2
 
-@Database(entities = [User::class, Budget::class, Expense::class], version = 1)
+@Database(entities = [User::class, Budget::class, Expense::class], version = 2)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
     abstract fun budgetDao(): BudgetDao

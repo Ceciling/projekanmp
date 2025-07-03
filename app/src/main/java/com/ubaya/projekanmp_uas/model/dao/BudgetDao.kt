@@ -22,6 +22,6 @@ interface BudgetDao {
     @Query("SELECT * FROM budgets ORDER BY createdAt DESC")
     fun getAllBudgets(): List<Budget>
 
-    @Query("SELECT * FROM budgets WHERE iduser=:userId ORDER BY createdAt DESC")
+    @Query("SELECT * FROM budgets WHERE iduser=:userId")
     fun getUserBudget(userId:Int): List<Budget>
 }
