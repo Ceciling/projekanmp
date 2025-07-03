@@ -55,4 +55,16 @@ class BudgetViewModel (application: Application) : AndroidViewModel(application)
             }
         }
     }
+    fun getBudgetById(id: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val db = buildDb(getApplication())
+                val budget = db.budgetDao().getBudgetById(id)
+                budgetLD.postValue(budget)
+            } catch (e: Exception) {
+                errorLD.postValue("Get Budget gagal: ${e.message}")
+            }
+        }
+    }
+
 }

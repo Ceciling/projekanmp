@@ -41,7 +41,9 @@ class ExpensesListAdapter (val expensesList:ArrayList<Expense>, val listBudget: 
     ) {
         Log.d("posisi",position.toString())
         val tanggal = expensesList[position].timestamp
-        val kategoriBudget = listBudget[expensesList[position].budgetId.toString().toInt()-1].name
+//        val kategoriBudget = listBudget[expensesList[position].budgetId.toString().toInt()-1].name
+        val budgetId = expensesList[position].budgetId
+        val kategoriBudget = listBudget.find { it.id == budgetId }?.name ?: "Unknown"
         val expenses = expensesList[position].amount.toString().toInt()
 
         holder.binding.textNominalExpense.text = "Rp. "+formatter(expenses)
@@ -58,9 +60,9 @@ class ExpensesListAdapter (val expensesList:ArrayList<Expense>, val listBudget: 
     }
     fun updateExpenseList(newExpensesList: List<Expense>,newlistName:List<Budget>) {
         expensesList.clear()
+        expensesList.addAll(newExpensesList)
         listBudget.clear()
         listBudget.addAll(newlistName)
-        expensesList.addAll(newExpensesList)
         notifyDataSetChanged()
     }
 
@@ -69,9 +71,7 @@ class ExpensesListAdapter (val expensesList:ArrayList<Expense>, val listBudget: 
         return dateFormat
     }
 
-    override fun getItemCount(): Int {
-        return expensesList.size
-    }
+    override fun getItemCount(): Int = expensesList.size
 
     class ExpensesViewHolder (var binding: ExpenseListItemBinding)
         :RecyclerView.ViewHolder(binding.root)

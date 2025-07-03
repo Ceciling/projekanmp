@@ -1,6 +1,7 @@
 package com.ubaya.projekanmp_uas.view
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -19,6 +20,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.text.DecimalFormat
 
 
@@ -32,61 +34,51 @@ class ReportFragment : Fragment() {
     private val budgetViewModel: BudgetViewModel by viewModels()
     private val expenseViewModel: ExpenseViewModel by viewModels()
     private lateinit var sessionManager: SessionManager
-    private val adapter = ReportListAdapter(arrayListOf(), hashMapOf())
+    private val budgets = arrayListOf<Budget>()
+    private val totalExpensePerBudget = mutableMapOf<Int, Long>()
+    private lateinit var adapter: ReportListAdapter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-
-        }
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentReportBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
         sessionManager = SessionManager(requireContext())
         val userId = sessionManager.getUserId()
-        val jobList = mutableListOf<Job>()
-        //val budgets = mutableListOf<Budget>()
-        val budgets = arrayListOf<Budget>()
-        val totalExpensePerBudget = mutableMapOf<Int, Long>()
-        var totalAllExpense = 0L
-        //val adapter = ArrayList<Budget>()
-        val adapter = ReportListAdapter(budgets, totalExpensePerBudget)
+
+        adapter = ReportListAdapter(budgets, totalExpensePerBudget)
         binding.recReport.layoutManager = LinearLayoutManager(requireContext())
         binding.recReport.adapter = adapter
 
-        val budgetJob = lifecycleScope.launch(Dispatchers.IO) {
+        lifecycleScope.launch(Dispatchers.IO) {
             val db = buildDb(requireContext())
-            val result = db.budgetDao().getUserBudget(userId)
-            budgets.addAll(result)
-        }
-        jobList.add(budgetJob)
-        val expenseJob = lifecycleScope.launch(Dispatchers.IO) {
-            val db = buildDb(requireContext())
-            budgets.forEach { budget ->
+
+            val budgetList = db.budgetDao().getUserBudget(userId)
+            val expensesMap = mutableMapOf<Int, Long>()
+            var totalAllExpense = 0L
+
+            for (budget in budgetList) {
                 val expense = db.expenseDao().totalExpenseByBudget(userId, budget.id)
-                totalExpensePerBudget[budget.id] = expense
+                expensesMap[budget.id] = expense
                 totalAllExpense += expense
             }
-        }
-        jobList.add(expenseJob)
 
-        // INI WAJIB DIPANGGIL DI DALAM launch coroutine (lifecycleScope.launch)
-        lifecycleScope.launch {
-            jobList.joinAll()
-            adapter.update(budgets, totalExpensePerBudget)
-            binding.txtTotalReport.text =
-                "Total Expense: Rp${
-                    DecimalFormat("#,###").format(totalAllExpense).replace(",", ".")
-                }"
+            withContext(Dispatchers.Main) {
+                budgets.clear()
+                budgets.addAll(budgetList)
+                totalExpensePerBudget.clear()
+                totalExpensePerBudget.putAll(expensesMap)
+
+                Log.d("DEBUG", "budgets: ${budgets.size}, expenses: ${totalExpensePerBudget.size}")
+                adapter.notifyDataSetChanged()
+
+                val totalBudget = budgets.sumOf { it.maxAmount }
+                val formatter = DecimalFormat("#,###")
+
+                binding.txtTotalReport.text =
+                    "Total Expense / Budget: Rp${formatter.format(totalAllExpense).replace(",", ".")} / Rp${formatter.format(totalBudget).replace(",", ".")}"
+            }
         }
     }
 }
